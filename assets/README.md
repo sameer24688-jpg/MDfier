@@ -7,9 +7,11 @@
 - `app.ico` - multi-size Windows icon (16-256 px) derived from `logo.png` with Pillow;
   used for the window/taskbar (via `app.setWindowIcon`) and the exe (`build.spec` `icon=`).
   The build works without it.
-- `DejaVuSans.ttf` - Unicode font used by the `.md -> .pdf` converter (`fpdf2`). Optional:
-  if absent, the app falls back to a Windows system font (Arial). Bundling it makes the
-  portable `.exe` render full Unicode on machines without a suitable system font.
+- `DejaVuSans.ttf` - **not included by default.** If you drop this Unicode font here,
+  the `.md -> .pdf` converter (`fpdf2`) uses it for full Unicode rendering; if absent
+  (the default), the app falls back to a Windows system font (Arial). Add it before
+  building to render full Unicode in PDFs on machines without a suitable system font.
+  (DejaVu Fonts License - permissive; https://dejavu-fonts.github.io/)
 - `ocr_models/<key>/*.onnx` - optional PP-OCR recognition models fetched by
   `download_models.py` for non-built-in OCR languages.
 

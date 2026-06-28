@@ -37,6 +37,11 @@ if os.path.isdir("assets"):
             full = os.path.join(root, name)
             datas.append((full, root))
 
+# Ship license/attribution alongside the binary (required by bundled licenses).
+for notice in ("LICENSE", "THIRD_PARTY_LICENSES.txt", "THIRD_PARTY_NOTICES.md"):
+    if os.path.exists(notice):
+        datas.append((notice, "."))
+
 icon_path = os.path.join("assets", "app.ico")
 icon = icon_path if os.path.exists(icon_path) else None
 

@@ -88,7 +88,7 @@ Every input type above goes through the single **Any file → Markdown** action 
 |---|---|
 | `.docx` | markdown -> HTML -> htmldocx |
 | `.html` | markdown |
-| `.pdf` | fpdf2 (bundled DejaVuSans Unicode font) |
+| `.pdf` | fpdf2 (Unicode via `assets/DejaVuSans.ttf` if present, else a system font) |
 | `.txt` | markdown -> HTML -> tag strip |
 | `.xlsx` | GFM tables -> openpyxl (one sheet per table) |
 | `.csv` | GFM tables -> csv (one file per table) |
@@ -139,7 +139,7 @@ python download_models.py        # optional: bundle extra OCR languages
 pyinstaller build.spec
 ```
 
-The result is `dist/MDfier.exe`. The built-in OCR model, any downloaded language models, the app icon/logo, and the Unicode font are bundled, so the first launch works fully offline. Skip `download_models.py` to ship English/Chinese only (smaller exe).
+The result is `dist/MDfier.exe`. The built-in OCR model, any downloaded language models, and the app icon/logo are bundled, so the first launch works fully offline. Skip `download_models.py` to ship English/Chinese only (smaller exe). For full Unicode PDF output, drop a `DejaVuSans.ttf` into `assets/` before building (otherwise PDF export uses a system font such as Arial).
 
 Verify a finished build headlessly:
 
@@ -167,7 +167,7 @@ converters.py       All conversion logic (to/from Markdown), unique-name output 
 ocr.py              RapidOCR engines + language registry + PDF rasterize
 download_models.py  Build-time fetch of OCR language models
 build.spec          PyInstaller onefile config (MDfier.exe)
-assets/             logo.png, icon.png, app.ico, Unicode font, OCR models
+assets/             logo.png, icon.png, app.ico, OCR models (optional DejaVuSans.ttf)
 tests/              unittest suite (converters + ocr registry)
 .github/workflows/  CI: tests + portable exe build + --selftest
 ```
@@ -207,5 +207,19 @@ MDfier is licensed under the **GNU Affero General Public License v3.0** - see [L
 combined, distributed work to be offered under AGPL-3.0. If you need a
 permissive/proprietary distribution instead, obtain commercial licenses from
 Riverbank Computing (PyQt) and Artifex Software (PyMuPDF), or replace those
-components (e.g. PySide6 under LGPL and a non-AGPL PDF library). See
-[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+components (e.g. PySide6 under LGPL and a non-AGPL PDF library).
+
+**Getting the source.** When you share `MDfier.exe`, the AGPL requires that
+recipients can obtain the corresponding source. The complete source for every
+release is at <https://github.com/sameer24688-jpg/MDfier> (use the matching
+release tag). The executable also ships `LICENSE`, `THIRD_PARTY_NOTICES.md`, and
+`THIRD_PARTY_LICENSES.txt` (full texts of all bundled components) beside it.
+
+> *Note on AGPL Section 13 (network use):* MDfier is an **offline desktop
+> application** that does not interact with users over a network, so the AGPL's
+> remote-network-source clause has no practical effect here; it applies only if
+> someone modifies MDfier into a network service.
+
+See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for the full attribution
+list and [THIRD_PARTY_LICENSES.txt](THIRD_PARTY_LICENSES.txt) for the bundled
+license texts.

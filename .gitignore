@@ -17,8 +17,13 @@ dist/
 # Logs / self-test artifacts
 *.log
 build_log.txt
+build_lite_log.txt
 mdfier_selftest.log
 mdfier_startup.log
+
+# License-tooling intermediate (regenerate with pip-licenses + gen_notices.py)
+licenses_raw.json
+dejavu.zip
 
 # Local conversion test artifacts (not part of the app)
 review_out/

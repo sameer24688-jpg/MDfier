@@ -409,7 +409,9 @@ class Workspace(QWidget):
             self, "About",
             f"{APP_TITLE}\n\nOffline document <-> Markdown converter built on "
             "Microsoft MarkItDown with local RapidOCR.\n\nLicensed under "
-            "AGPL-3.0 (bundles PyQt6 and PyMuPDF). See THIRD_PARTY_NOTICES.md.\n"
+            "AGPL-3.0 (bundles PyQt6 and PyMuPDF). Source code:\n"
+            "https://github.com/sameer24688-jpg/MDfier\n"
+            "See THIRD_PARTY_NOTICES.md / THIRD_PARTY_LICENSES.txt.\n"
             "100% offline - nothing leaves your machine.",
         )
 
