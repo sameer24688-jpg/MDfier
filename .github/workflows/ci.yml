@@ -48,9 +48,13 @@ jobs:
 
       - name: Smoke-test the executable (--selftest)
         run: |
-          .\dist\MDfier.exe --selftest
-          if ($LASTEXITCODE -ne 0) { Get-Content .\mdfier_selftest.log; exit 1 }
-          Get-Content .\mdfier_selftest.log
+          # MDfier.exe is a windowed (console=False) app, so PowerShell does not
+          # block on it when launched directly. Start-Process -Wait forces us to
+          # wait for completion and capture the real exit code.
+          $p = Start-Process -FilePath .\dist\MDfier.exe -ArgumentList '--selftest' -PassThru -Wait
+          if (Test-Path .\mdfier_selftest.log) { Get-Content .\mdfier_selftest.log }
+          else { Write-Error "Self-test produced no log (exe did not run)"; exit 1 }
+          if ($p.ExitCode -ne 0) { Write-Error "Self-test failed (exit $($p.ExitCode))"; exit 1 }
 
       - name: Upload exe artifact
         uses: actions/upload-artifact@v4
