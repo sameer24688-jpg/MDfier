@@ -1,0 +1,31 @@
+# MDfier - runtime dependencies
+# Pinned lower bounds tested on Python 3.12. Run `pip freeze` after install to lock exact versions.
+
+# GUI
+PyQt6>=6.7,<7
+
+# Core: anything -> Markdown
+markitdown[all]>=0.1.1
+
+# OCR (offline, no PyTorch; models ship inside the wheel)
+rapidocr-onnxruntime>=1.3.24
+onnxruntime>=1.18
+
+# PDF rasterization for scanned-doc OCR
+PyMuPDF>=1.24
+
+# Layout-aware PDF -> Markdown (multi-column reading order, tables, figures)
+pymupdf4llm>=1.0
+
+# Markdown -> other formats (reverse path)
+markdown>=3.6
+htmldocx>=0.0.6
+python-docx>=1.1
+fpdf2>=2.7
+openpyxl>=3.1
+
+# Imaging
+Pillow>=10.3
+
+# Packaging (build-time only)
+pyinstaller>=6.6

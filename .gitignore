@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# PyInstaller build output
+build/
+dist/
+*.spec.bak
+
+# Logs / self-test artifacts
+*.log
+build_log.txt
+mdfier_selftest.log
+mdfier_startup.log
+
+# Local conversion test artifacts (not part of the app)
+review_out/
+*_images/
+palladium-catalyzed-*
+
+
+# Downloaded OCR models (fetch with: python download_models.py)
+assets/ocr_models/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
