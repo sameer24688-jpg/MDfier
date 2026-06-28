@@ -4,8 +4,8 @@
 
 # MDfier
 
-<!-- Replace OWNER/REPO with your GitHub slug to activate the badge. -->
-[![CI](https://github.com/OWNER/REPO/actions/workflows/ci.yml/badge.svg)](https://github.com/OWNER/REPO/actions/workflows/ci.yml)
+[![CI](https://github.com/sameer24688-jpg/MDfier/actions/workflows/ci.yml/badge.svg)](https://github.com/sameer24688-jpg/MDfier/actions/workflows/ci.yml)
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 
 **MDfier** is a privacy-first, **100% offline** desktop app that converts documents **to Markdown** and Markdown **back** to common office formats. Built on [Microsoft MarkItDown](https://github.com/microsoft/markitdown) with a simple two-action UI and drag-and-drop. Ships as a single portable `.exe` (no install required).
 

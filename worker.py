@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Copyright (C) 2026 MDfier contributors
+# https://github.com/sameer24688-jpg/MDfier
 """Background conversion worker.
 
 Runs conversions off the GUI thread so the interface stays responsive during

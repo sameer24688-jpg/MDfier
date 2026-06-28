@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Copyright (C) 2026 MDfier contributors
+# https://github.com/sameer24688-jpg/MDfier
 """Download the PP-OCRv4 recognition models for the non-default OCR languages.
 
 Run once before building so the models ship inside the portable exe:

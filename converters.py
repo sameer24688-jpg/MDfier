@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Copyright (C) 2026 MDfier contributors
+# https://github.com/sameer24688-jpg/MDfier
 """Conversion logic for MDfier.
 
 Two directions:

@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Copyright (C) 2026 MDfier contributors
+# https://github.com/sameer24688-jpg/MDfier
 """MDfier - privacy-first, offline document <-> Markdown converter.
 
 A two-action UI (any file -> Markdown, Markdown -> other format) plus a
