@@ -52,7 +52,10 @@ flowchart TD
 | `converters.py` | All conversion logic + routing. Forward (to Markdown) and reverse (from Markdown). Pure functions. Outputs are routed through `_unique_path` so nothing is overwritten; `Cancelled`/`_check_cancel` enable cooperative abort. | `convert`, `to_markdown`, `from_markdown`, `pdf_to_markdown`, `markdown_to_*`, `extract_markdown_tables`, `_unique_path`, `Cancelled`, `_check_cancel`, `_as_blockquote`, `_strip_boundary_overlap`, `_retag_figures` |
 | `ocr.py` | OCR subsystem: per-language RapidOCR engine cache, language->model registry, PDF page rasterization. | `LANG_TO_MODEL`, `MODEL_FILES`, `get_engine`, `available_languages`, `ocr_pil_image`, `render_pdf_page` |
 | `download_models.py` | Build-time fetch of PP-OCRv4 script models into `assets/ocr_models/`. | `download`, `main` |
-| `build.spec` / `build.bat` | PyInstaller onefile packaging; bundles models/fonts via recursive `assets/` walk. | - |
+| `lite_app.py` | **MDfier Lite** - a simplified single-window GUI (one drag-and-drop zone, output-format "pills", OCR-language dropdown) that reuses the same `converters`/`worker`/`ocr` backend. Packaged separately as `MDfier-Lite.exe`. | `LiteWorkspace`, `DropZone`, `main()` |
+| `build.spec` / `build.bat` | PyInstaller onefile packaging for `MDfier.exe`; bundles models/fonts via recursive `assets/` walk. | - |
+| `build_lite.spec` | PyInstaller onefile packaging for `MDfier-Lite.exe` (entry point `lite_app.py`). | - |
+| `gen_notices.py` | Build-time generator for `THIRD_PARTY_NOTICES.md` + `THIRD_PARTY_LICENSES.txt` from `pip-licenses` output (normalizes SPDX labels). | `to_spdx`, `write_notices`, `write_license_texts` |
 
 ## Runtime data flow
 
@@ -78,7 +81,7 @@ sequenceDiagram
         C->>C: merge chunks in page order
     else image
         C->>O: ocr_image_file(path, lang)
-    else office/html/csv
+    else office/html/other
         C->>C: MarkItDown.convert()
     end
     C-->>W: [out.md]
@@ -149,7 +152,8 @@ flowchart LR
     exe --> selftest["MDfier.exe --selftest\n(headless PASS/FAIL verify)"]
 ```
 
-- `build.spec` uses `collect_all` for `rapidocr_onnxruntime`, `onnxruntime`, `markitdown`, `fpdf`, `pymupdf`, `pymupdf4llm`, `pymupdf_layout`; `collect_submodules` for `markitdown` and `pdfminer`; and `copy_metadata` for `onnxruntime`/`rapidocr_onnxruntime`/`pymupdf4llm`/`markitdown` (some libs read their version via `importlib.metadata` at runtime). It recursively bundles `assets/` (fonts, logo/icon, OCR models) and sets the exe `icon` to `assets/app.ico`.
+- `build.spec` uses `collect_all` for `rapidocr_onnxruntime`, `onnxruntime`, `markitdown`, `magika`, `fpdf`, `pymupdf`, `pymupdf4llm`, `pymupdf_layout`; `collect_submodules` (guarded) for `markitdown` and `pdfminer`; and `copy_metadata` for `onnxruntime`/`rapidocr_onnxruntime`/`pymupdf4llm`/`markitdown`/`magika` (some libs read their version via `importlib.metadata` at runtime; `magika` ships ONNX file-type models MarkItDown needs). It recursively bundles `assets/` (fonts, logo/icon, OCR models), bundles `LICENSE`/`THIRD_PARTY_NOTICES.md`/`THIRD_PARTY_LICENSES.txt` beside the exe, and sets the exe `icon` to `assets/app.ico`. `build_lite.spec` is identical but builds `MDfier-Lite.exe` from `lite_app.py`.
+- **Lean dependency surface.** `requirements.txt` pins `markitdown[docx,pptx,pdf]` (not `[all]`), so the unused cloud/audio/YouTube/spreadsheet-input backends (Azure SDKs, `pydub`, `SpeechRecognition`, `youtube-transcript-api`, `pandas`, `xlrd`, `olefile`) are never installed or bundled - keeping the exe smaller and the build fully offline. The specs also list these as PyInstaller `excludes` (`UNUSED_BACKENDS`) as a belt-and-suspenders guard. PDFs use our own `pymupdf4llm` engine, images use RapidOCR, and `Markdown -> XLSX` uses our own `openpyxl`, so dropping the markitdown extras costs no functionality.
 - `resource_path()` (in `app.py`, `converters.py`, and `ocr.py`) resolves bundled files via `sys._MEIPASS` at runtime, or the script dir when run from source. `app.py` uses it for the header logo (`assets/logo.png`) and window icon (`assets/app.ico`).
 - **Branding.** `assets/logo.png` is the source mark; `assets/app.ico` (multi-size) is derived from it with Pillow. On Windows, `main()` sets `SetCurrentProcessExplicitAppUserModelID("MDfier.App")` so the taskbar uses the app icon. If the logo asset is missing, the header falls back to a styled "MDfier" text wordmark.
 - **Self-test.** `MDfier.exe --selftest` (and `python app.py --selftest`) runs `run_selftest()`: every model-free conversion against generated samples, writing `mdfier_selftest.log` and exiting `0`/`1`. CI uses this to verify the frozen exe actually runs.
@@ -163,9 +167,15 @@ flowchart LR
   converters.py       # all conversion logic
   ocr.py              # OCR engines + language registry
   download_models.py  # build-time model fetcher
-  build.spec          # PyInstaller config
+  lite_app.py         # MDfier Lite GUI (single drop zone)
+  build.spec          # PyInstaller config (MDfier.exe)
+  build_lite.spec     # PyInstaller config (MDfier-Lite.exe)
   build.bat           # one-shot build script
+  gen_notices.py      # generates THIRD_PARTY_NOTICES.md / _LICENSES.txt
   requirements.txt
+  LICENSE             # GNU AGPL-3.0
+  THIRD_PARTY_NOTICES.md   # attribution table (bundled deps)
+  THIRD_PARTY_LICENSES.txt # full license texts (ships beside the exe)
   assets/
     logo.png          # brand mark (header + icon source)
     icon.png          # square icon (derived)
@@ -174,7 +184,8 @@ flowchart LR
     ocr_models/<key>/*.onnx  # bundled language models
   tests/              # unittest suite (converters + ocr)
   .github/workflows/ci.yml   # tests + exe build + --selftest
-  dist/MDfier.exe     # build output
+  dist/MDfier.exe          # full build output
+  dist/MDfier-Lite.exe     # lite build output
 ```
 
 ## Known limitations / future work
