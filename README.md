@@ -46,6 +46,30 @@ MDfier fixes that:
    of documents to produce Markdown for **RAG ingestion, embeddings, fine-tuning
    datasets, or agent context** — keeping your token counts (and bills) down.
 
+## How MDfier builds on Microsoft MarkItDown
+
+MDfier uses [Microsoft MarkItDown](https://github.com/microsoft/markitdown) as
+its core "anything → Markdown" engine, and wraps it with everything a
+**non-technical user** and a **clean LLM pipeline** actually need. MarkItDown is
+a fantastic developer library/CLI; MDfier turns it into a finished, friendly app
+and adds capabilities it doesn't have on its own:
+
+| | Microsoft MarkItDown | **MDfier** |
+|---|---|---|
+| **Interface** | Python library / command line | **Drag-and-drop desktop app**, single `.exe` — no Python, no terminal |
+| **Direction** | One-way: files → Markdown | **Two-way**: files → Markdown **and** Markdown → DOCX / PDF / HTML / TXT / XLSX / CSV |
+| **PDF handling** | Linear text extraction | **Layout-aware**: multi-column reading order, GitHub-flavored tables, and **figure extraction** to a sibling folder (via pymupdf4llm) |
+| **Scanned PDFs / images** | Limited; image understanding leans on a cloud LLM (API key) | **Offline OCR** (RapidOCR) in **11 languages**, per-page hybrid (digital text + OCR), no API, no internet |
+| **OCR/text duplication** | — | Fixes the **double-read "echo" bug** (`use_ocr=False`) and isolates OCR'd text in blockquotes so it won't pollute body text or RAG embeddings |
+| **Privacy** | Depends on configuration | **100% offline by design** — nothing leaves your machine |
+| **Distribution** | `pip install` | **Portable `.exe`** (full + a *Lite* one-window build) you can hand to a colleague |
+| **Safety/UX** | — | Non-destructive output naming, cancel button, large-file guard, language picker |
+
+In short: **MarkItDown is the engine; MDfier is the car** — built for people who
+just want clean, token-efficient Markdown without touching a command line, plus
+the reverse conversions, layout-aware PDFs, and offline OCR that the raw library
+leaves to you.
+
 ## Features
 
 ### To Markdown
