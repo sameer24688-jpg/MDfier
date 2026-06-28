@@ -23,10 +23,20 @@ for pkg in ("onnxruntime", "rapidocr_onnxruntime", "pymupdf4llm", "markitdown", 
     except Exception:
         pass
 
-hiddenimports += collect_submodules("markitdown")
-hiddenimports += collect_submodules("pdfminer")
+for pkg in ("markitdown", "pdfminer"):
+    try:
+        hiddenimports += collect_submodules(pkg)
+    except Exception:
+        pass
 hiddenimports += [
     "htmldocx", "docx", "openpyxl", "markdown", "fitz", "PIL", "numpy",
+]
+
+# Optional markitdown backends we deliberately do NOT ship (cloud/audio/youtube
+# /spreadsheet-input).
+UNUSED_BACKENDS = [
+    "azure", "pandas", "pydub", "speech_recognition", "youtube_transcript_api",
+    "xlrd", "olefile", "msal",
 ]
 
 if os.path.isdir("assets"):
@@ -53,7 +63,7 @@ a = Analysis(
     hiddenimports=hiddenimports,
     hookspath=[],
     runtime_hooks=[],
-    excludes=["tkinter", "matplotlib", "pytest"],
+    excludes=["tkinter", "matplotlib", "pytest"] + UNUSED_BACKENDS,
     noarchive=False,
 )
 

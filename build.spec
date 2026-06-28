@@ -29,10 +29,21 @@ for pkg in ("onnxruntime", "rapidocr_onnxruntime", "pymupdf4llm", "markitdown", 
 
 # MarkItDown discovers converters via submodules / entry points; pdfminer.six
 # powers its PDF text layer.
-hiddenimports += collect_submodules("markitdown")
-hiddenimports += collect_submodules("pdfminer")
+for pkg in ("markitdown", "pdfminer"):
+    try:
+        hiddenimports += collect_submodules(pkg)
+    except Exception:
+        pass
 hiddenimports += [
     "htmldocx", "docx", "openpyxl", "markdown", "fitz", "PIL", "numpy",
+]
+
+# Optional markitdown backends we deliberately do NOT ship (cloud/audio/youtube
+# /spreadsheet-input). Excluding keeps the build lean and fully offline even if a
+# stray import reference survives in markitdown's converter discovery.
+UNUSED_BACKENDS = [
+    "azure", "pandas", "pydub", "speech_recognition", "youtube_transcript_api",
+    "xlrd", "olefile", "msal",
 ]
 
 # Bundle local assets recursively (Unicode font, logo/icon, OCR language models).
@@ -61,7 +72,7 @@ a = Analysis(
     hiddenimports=hiddenimports,
     hookspath=[],
     runtime_hooks=[],
-    excludes=["tkinter", "matplotlib", "pytest"],
+    excludes=["tkinter", "matplotlib", "pytest"] + UNUSED_BACKENDS,
     noarchive=False,
 )
 

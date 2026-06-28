@@ -4,8 +4,14 @@
 # GUI
 PyQt6>=6.7,<7
 
-# Core: anything -> Markdown
-markitdown[all]>=0.1.1
+# Core: anything -> Markdown.
+# Only the extras we actually route through markitdown are installed:
+#   docx -> lxml + mammoth, pptx -> python-pptx, pdf -> pdfminer/pdfplumber.
+# HTML/TXT/JSON/XML/EPUB are handled by markitdown's core; PDFs use our own
+# pymupdf4llm engine; images use RapidOCR; Markdown->XLSX uses openpyxl below.
+# This deliberately avoids [all], which drags in unused Azure, YouTube and
+# audio-transcription SDKs (keeps the build lean and fully offline).
+markitdown[docx,pptx,pdf]>=0.1.1
 
 # OCR (offline, no PyTorch; models ship inside the wheel)
 rapidocr-onnxruntime>=1.3.24

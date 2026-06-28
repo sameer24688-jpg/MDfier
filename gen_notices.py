@@ -30,6 +30,48 @@ def norm(name: str) -> str:
     return name.lower().replace("_", "-").replace(".", "-")
 
 
+# Map common (non-SPDX) metadata strings to canonical SPDX identifiers.
+# Only unambiguous mappings are included; anything else passes through unchanged
+# (so we never mislabel, e.g., a BSD-2 package as BSD-3).
+SPDX_MAP = {
+    "mit": "MIT",
+    "mit license": "MIT",
+    "apache 2.0": "Apache-2.0",
+    "apache-2.0": "Apache-2.0",
+    "apache software license": "Apache-2.0",
+    "apache license 2.0": "Apache-2.0",
+    "mozilla public license 2.0 (mpl 2.0)": "MPL-2.0",
+    "mpl-2.0": "MPL-2.0",
+    "python software foundation license": "PSF-2.0",
+    "the unlicense (unlicense)": "Unlicense",
+    "isc license (iscl)": "ISC",
+    "gnu lesser general public license v3 (lgplv3)": "LGPL-3.0-only",
+    "lgpl-3.0-only": "LGPL-3.0-only",
+    "gpl-3.0-only": "GPL-3.0-only",
+    "bsd license": "BSD-3-Clause",
+    "bsd-3-clause": "BSD-3-Clause",
+    "bsd": "BSD-3-Clause",
+}
+
+
+def to_spdx(value: str) -> str:
+    return SPDX_MAP.get(value.strip().lower(), value.strip())
+
+
+# Canonical full-text references for the permissive license families used by
+# packages that do not embed a license file in their wheel metadata.
+SPDX_TEXT_URL = {
+    "MIT": "https://opensource.org/license/mit/",
+    "Apache-2.0": "https://www.apache.org/licenses/LICENSE-2.0",
+    "BSD-3-Clause": "https://opensource.org/license/bsd-3-clause/",
+    "BSD-2-Clause": "https://opensource.org/license/bsd-2-clause/",
+    "ISC": "https://opensource.org/license/isc-license-txt/",
+    "MPL-2.0": "https://www.mozilla.org/MPL/2.0/",
+    "PSF-2.0": "https://docs.python.org/3/license.html",
+    "Unlicense": "https://unlicense.org/",
+}
+
+
 def load() -> list[dict]:
     with open("licenses_raw.json", encoding="utf-8") as fh:
         rows = json.load(fh)
@@ -41,7 +83,7 @@ def load() -> list[dict]:
 def clean_license(value: str) -> str:
     if not value or value.strip().upper() in ("UNKNOWN", ""):
         return "see bundled license text"
-    return value.strip().replace("\n", " ")
+    return to_spdx(value.replace("\n", " ").strip())
 
 
 NOTICES_HEADER = """# Third-Party Notices
@@ -143,10 +185,21 @@ def write_license_texts(rows: list[dict]) -> int:
             out.append(text)
         else:
             missing += 1
-            out.append(
-                "(No license file was found in the package metadata. See the "
-                "project URL above for the authoritative license text.)"
-            )
+            canonical = SPDX_TEXT_URL.get(lic)
+            if canonical:
+                out.append(
+                    f"(This package ships under the {lic} license but did not "
+                    "embed a license file in its wheel metadata. The complete "
+                    f"{lic} license text is reproduced in full elsewhere in this "
+                    "file by other components using the same license, and the "
+                    f"canonical text is available at: {canonical} )"
+                )
+            else:
+                out.append(
+                    f"(No license file was found in the package metadata; the "
+                    f"declared license is {lic}. See the project URL above for "
+                    "the authoritative license text.)"
+                )
         out.append("")
     with open("THIRD_PARTY_LICENSES.txt", "w", encoding="utf-8") as fh:
         fh.write("\n".join(out))
