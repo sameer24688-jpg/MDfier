@@ -121,6 +121,32 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for the component diagram, data flow, thr
 
 All conversion and OCR happen on-device. No network calls, no telemetry, no cloud.
 
+## Acknowledgements
+
+MDfier stands on excellent open-source work, most notably:
+
+- [Microsoft MarkItDown](https://github.com/microsoft/markitdown) - the core "anything → Markdown" engine
+- [PyMuPDF](https://github.com/pymupdf/PyMuPDF) + [pymupdf4llm](https://github.com/pymupdf/PyMuPDF4LLM) - layout-aware PDF parsing, tables, and figures
+- [RapidOCR](https://github.com/RapidAI/RapidOCR) (ONNX Runtime) - offline OCR
+- [PyQt6](https://www.riverbankcomputing.com/software/pyqt/) - the desktop UI
+- plus fpdf2, python-docx, htmldocx, openpyxl, Python-Markdown, Pillow, NumPy, pdfminer.six, and Magika
+
+Full attributions and license identifiers are in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
 ## License
 
-MIT - see [LICENSE](LICENSE).
+MDfier is licensed under the **GNU Affero General Public License v3.0** - see [LICENSE](LICENSE).
+
+> Copyright (C) 2026 MDfier contributors.
+> This program is free software: you can redistribute it and/or modify it under
+> the terms of the GNU Affero General Public License as published by the Free
+> Software Foundation, either version 3 of the License, or (at your option) any
+> later version. It is distributed WITHOUT ANY WARRANTY; see the license for details.
+
+**Why AGPL and not MIT?** The packaged app bundles **PyQt6** (GPL-3.0) and
+**PyMuPDF / pymupdf4llm** (AGPL-3.0). These copyleft licenses require the
+combined, distributed work to be offered under AGPL-3.0. If you need a
+permissive/proprietary distribution instead, obtain commercial licenses from
+Riverbank Computing (PyQt) and Artifex Software (PyMuPDF), or replace those
+components (e.g. PySide6 under LGPL and a non-AGPL PDF library). See
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

@@ -56,7 +56,7 @@ flowchart TD
 - `requirements.txt` — pinned, tested versions of: `markitdown[all]`, `PyQt6`, `python-docx`, `markdown`, `htmldocx`, `rapidocr-onnxruntime`, `onnxruntime`, `PyMuPDF`, `Pillow`, `fpdf2`, `openpyxl`. (`csv`, `html.parser` are stdlib.)
 - `assets/DejaVuSans.ttf` — Unicode font bundled for `fpdf2` PDF output (avoids Latin-1-only crash on curly quotes/accents/em-dashes).
 - `assets/app.ico` — optional app icon; build falls back gracefully if absent.
-- `LICENSE` — MIT (open source).
+- `LICENSE` — AGPL-3.0 (required by bundled PyQt6/PyMuPDF copyleft); see `THIRD_PARTY_NOTICES.md`.
 - `README.md` — usage, build steps, supported formats, offline/privacy note.
 - `ocr.py` — lazy-loaded RapidOCR singleton + `ocr_image(pil_or_path)` and PDF-page helper via PyMuPDF.
 - `converters.py` — pure functions: `to_markdown(path)`, `scanned_pdf_to_markdown(path)`, `image_to_markdown(path)`, `markdown_to_docx(path)`, `markdown_to_html(path)`, `markdown_to_pdf(path)`, `markdown_to_txt(path)`, `markdown_to_xlsx(path)`, `markdown_to_csv(path)`, plus a shared `extract_markdown_tables(md)` helper.

@@ -405,7 +405,8 @@ class Workspace(QWidget):
         QMessageBox.about(
             self, "About",
             f"{APP_TITLE}\n\nOffline document <-> Markdown converter built on "
-            "Microsoft MarkItDown with local RapidOCR.\n\nMIT licensed. "
+            "Microsoft MarkItDown with local RapidOCR.\n\nLicensed under "
+            "AGPL-3.0 (bundles PyQt6 and PyMuPDF). See THIRD_PARTY_NOTICES.md.\n"
             "100% offline - nothing leaves your machine.",
         )
 
