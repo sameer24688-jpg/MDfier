@@ -6,10 +6,45 @@
 
 [![CI](https://github.com/sameer24688-jpg/MDfier/actions/workflows/ci.yml/badge.svg)](https://github.com/sameer24688-jpg/MDfier/actions/workflows/ci.yml)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+[![Download](https://img.shields.io/badge/Download-Windows%20.exe-2b88d8.svg)](https://github.com/sameer24688-jpg/MDfier/releases/latest)
+[![Made for LLMs](https://img.shields.io/badge/Made%20for-LLMs%20%26%20RAG-7c3aed.svg)](#why-mdfier-built-for-ai--llm-workflows)
 
-**MDfier** is a privacy-first, **100% offline** desktop app that converts documents **to Markdown** and Markdown **back** to common office formats. Built on [Microsoft MarkItDown](https://github.com/microsoft/markitdown) with a simple two-action UI and drag-and-drop. Ships as a single portable `.exe` (no install required).
+> **Download:** grab the latest `MDfier.exe` (full) or `MDfier-Lite.exe` (simplest UI) from the [**Releases page**](https://github.com/sameer24688-jpg/MDfier/releases/latest) — double-click and go.
+
+> **Turn any document into clean, LLM-ready Markdown — drag, drop, done.**
+> Feed PDFs, Word docs, slides, and images to ChatGPT, Claude, Gemini, or your
+> RAG pipeline **without the formatting noise that wastes tokens**.
+
+**MDfier** is a privacy-first, **100% offline** desktop app that converts documents **to Markdown** (and Markdown **back** to common office formats). Built on [Microsoft MarkItDown](https://github.com/microsoft/markitdown) with a dead-simple drag-and-drop UI. Ships as a single portable `.exe` — **no install, no Python, no command line, no account.**
 
 Nothing leaves your machine: parsing and OCR run locally.
+
+## Why MDfier? (Built for AI & LLM workflows)
+
+Copy-pasting a PDF or Word file into an AI chat is messy and expensive: binary
+formats can't be pasted at all, and raw exports carry layout junk, repeated
+headers/footers, and broken tables that **burn tokens and confuse the model.**
+MDfier fixes that:
+
+- **Fewer tokens, lower cost.** Markdown is compact, plain text. Stripping a
+  document down to clean Markdown typically removes a large chunk of structural
+  noise, so the model spends its context window on *content*, not formatting.
+- **Better answers.** Clean headings, lists, and GitHub-flavored tables preserve
+  the document's structure so the LLM actually understands it. Scanned text is
+  OCR'd and clearly labelled so it won't pollute the main text.
+- **Less friction.** No converting to text by hand, no copy-paste cleanup. Drag
+  a file in, get a `.md` you can paste anywhere or attach to any tool.
+- **Private by default.** 100% offline — perfect for confidential or internal
+  documents you can't upload to a cloud converter.
+
+### Two ways to use it
+
+1. **Standalone (non-technical):** download the `.exe`, drag a file onto it, and
+   paste the resulting Markdown into ChatGPT / Claude / Gemini / NotebookLM, or
+   drop it into your notes/Obsidian vault. That's it.
+2. **As a pre-processing step / "skill" in an AI pipeline:** run it on a folder
+   of documents to produce Markdown for **RAG ingestion, embeddings, fine-tuning
+   datasets, or agent context** — keeping your token counts (and bills) down.
 
 ## Features
 
